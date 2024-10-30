@@ -5,13 +5,19 @@
   "main": "src/server.js",
   "scripts": {
     "format:fix": "prettier . --write",
-    "format:check": "prettier . --check"
+    "format:check": "prettier . --check",
+    "lint:check": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "author": "Manthan Sharma <techmanthansharma@gmail.com>",
   "license": "ISC",
   "devDependencies": {
+    "@eslint/js": "^9.13.0",
+    "@types/eslint__js": "^8.42.3",
     "@types/node": "^22.8.4",
+    "eslint": "^9.13.0",
     "prettier": "3.3.3",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.12.2"
   }
 }
