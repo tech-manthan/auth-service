@@ -4,12 +4,14 @@
   "description": "This is a Backend Service Template",
   "main": "src/server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "format:fix": "prettier . --write",
+    "format:check": "prettier . --check"
   },
   "author": "Manthan Sharma <techmanthansharma@gmail.com>",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^22.8.4",
+    "prettier": "3.3.3",
     "typescript": "^5.6.3"
   }
 }
