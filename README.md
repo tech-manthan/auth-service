@@ -1,3 +1,3 @@
-# BACKEND SERVICE TEMPLATE
+# AUTH SERVICE
 
-Basic Backend Service Template to be used to build backend using express js along with typescript support
+## FEATURES

@@ -1,7 +1,7 @@
 {
-  "name": "service-template",
+  "name": "auth-service",
   "version": "1.0.0",
-  "description": "This is a Backend Service Template",
+  "description": "Auth Service for User Management & Authentication",
   "main": "src/server.js",
   "scripts": {
     "dev": "nodemon src/server.ts",
