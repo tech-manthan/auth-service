@@ -9,7 +9,13 @@ export default tseslint.config(
   ...tseslint.configs.recommendedTypeChecked,
   eslintConfigPrettier,
   {
-    ignores: ["dist", "nodemodules", "eslint.config.mjs", "jest.config.js"],
+    ignores: [
+      "dist",
+      "nodemodules",
+      "eslint.config.mjs",
+      "jest.config.js",
+      "tests",
+    ],
   },
   {
     languageOptions: {
