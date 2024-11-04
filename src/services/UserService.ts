@@ -14,7 +14,7 @@ export default class UserService {
   async create({ firstName, lastName, email, password }: UserData) {
     const userRepository = AppDataSource.getRepository(User);
 
-    await userRepository.save({
+    return await userRepository.save({
       firstName,
       lastName,
       email,
