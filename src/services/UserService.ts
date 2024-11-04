@@ -25,4 +25,16 @@ export default class UserService {
       throw createHttpError(500, "database error while saving user");
     }
   }
+
+  async findUserByEmail(email: string) {
+    try {
+      return await this.userRepository.findOne({
+        where: {
+          email,
+        },
+      });
+    } catch {
+      throw createHttpError(500, "database error while fetching user");
+    }
+  }
 }

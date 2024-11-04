@@ -3,6 +3,7 @@ import { RegisterUserRequest } from "../types/request.type";
 import { PasswordService, UserService } from "../services";
 import { AuthControllerConstructor } from "../types/controller.type";
 import { Logger } from "winston";
+import createHttpError from "http-errors";
 
 export class AuthController {
   private userService: UserService;
@@ -28,6 +29,13 @@ export class AuthController {
     });
 
     try {
+      const userExist = await this.userService.findUserByEmail(email);
+
+      if (userExist) {
+        const err = createHttpError(400, "user already exist, try logging in");
+        return next(err);
+      }
+
       const hashedPassword =
         await this.passwordService.hashedPassword(password);
 
