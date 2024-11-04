@@ -1,8 +1,8 @@
 import { Repository } from "typeorm";
-import { AppDataSource } from "../database/data-source";
 import { UserServiceConstructor } from "../types/service.type";
 import { UserData } from "../types/user.type";
 import { User } from "../entity";
+import createHttpError from "http-errors";
 
 export default class UserService {
   private userRepository: Repository<User>;
@@ -12,13 +12,15 @@ export default class UserService {
   }
 
   async create({ firstName, lastName, email, password }: UserData) {
-    const userRepository = AppDataSource.getRepository(User);
-
-    return await userRepository.save({
-      firstName,
-      lastName,
-      email,
-      password,
-    });
+    try {
+      return await this.userRepository.save({
+        firstName,
+        lastName,
+        email,
+        password,
+      });
+    } catch {
+      throw createHttpError(500, "database error while saving user");
+    }
   }
 }
