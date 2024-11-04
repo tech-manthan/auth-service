@@ -4,6 +4,7 @@ import { PasswordService, UserService } from "../services";
 import { AuthControllerConstructor } from "../types/controller.type";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
+import { validationResult } from "express-validator";
 
 export class AuthController {
   private userService: UserService;
@@ -21,6 +22,15 @@ export class AuthController {
   }
 
   async register(req: RegisterUserRequest, res: Response, next: NextFunction) {
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      res.status(400).json({
+        errors: result.array(),
+      });
+      return;
+    }
+
     const { firstName, lastName, email, password } = req.body;
     this.logger.info("request to register a user", {
       email,
