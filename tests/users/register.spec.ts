@@ -5,6 +5,7 @@ import request from "supertest";
 import { AppDataSource } from "../../src/database/data-source";
 import truncateTables from "../utils/truncateTables";
 import { User } from "../../src/entity";
+import { Roles } from "../../src/constants";
 
 describe("POST /auth/register", () => {
   let connection: DataSource;
@@ -14,7 +15,8 @@ describe("POST /auth/register", () => {
   });
 
   beforeEach(async () => {
-    await truncateTables(connection);
+    await connection.dropDatabase();
+    await connection.synchronize();
   });
 
   afterAll(async () => {
@@ -91,7 +93,24 @@ describe("POST /auth/register", () => {
 
       expect(response.body).toHaveProperty("id");
     });
-  });
 
+    it("should assign a customer role", async () => {
+      const userData: UserData = {
+        firstName: "Manthan",
+        lastName: "Sharma",
+        email: "manthan@gmail.com",
+        password: "secret",
+      };
+
+      const response = await request(app as any)
+        .post("/auth/register")
+        .send(userData);
+      const userRepository = connection.getRepository(User);
+      const users = await userRepository.find();
+
+      expect(users[0]).toHaveProperty("role");
+      expect(users[0].role).toBe(Roles.CUSTOMER);
+    });
+  });
   describe("Fields are missing", () => {});
 });

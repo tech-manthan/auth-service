@@ -3,6 +3,7 @@ import { UserServiceConstructor } from "../types/service.type";
 import { UserData } from "../types/user.type";
 import { User } from "../entity";
 import createHttpError from "http-errors";
+import { Roles } from "../constants";
 
 export default class UserService {
   private userRepository: Repository<User>;
@@ -18,6 +19,7 @@ export default class UserService {
         lastName,
         email,
         password,
+        role: Roles.CUSTOMER,
       });
     } catch {
       throw createHttpError(500, "database error while saving user");
