@@ -2,15 +2,17 @@ import { checkSchema } from "express-validator";
 
 const registerUserValidator = checkSchema({
   email: {
+    trim: true,
+
     isEmail: {
       errorMessage: "invalid email",
     },
     notEmpty: {
       errorMessage: "email is required",
     },
-    trim: true,
   },
   firstName: {
+    trim: true,
     notEmpty: {
       errorMessage: "firstName is required",
     },
@@ -20,15 +22,16 @@ const registerUserValidator = checkSchema({
       },
       errorMessage: "firstName should be at leasr 4 chars",
     },
-    trim: true,
   },
   lastName: {
+    trim: true,
+
     notEmpty: {
       errorMessage: "firstName is required",
     },
-    trim: true,
   },
   password: {
+    trim: true,
     isLength: {
       options: { min: 8, max: 20 },
       errorMessage: "Password should be at least 8 chars & at most 20 chars",
@@ -41,7 +44,6 @@ const registerUserValidator = checkSchema({
     notEmpty: {
       errorMessage: "Password is required",
     },
-    trim: true,
   },
 });
 
