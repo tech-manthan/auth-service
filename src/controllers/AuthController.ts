@@ -1,24 +1,68 @@
 import { NextFunction, Response } from "express";
 import { RegisterUserRequest } from "../types/request.type";
-import { PasswordService, UserService } from "../services";
+import { PasswordService, TokenService, UserService } from "../services";
 import { AuthControllerConstructor } from "../types/controller.type";
 import { Logger } from "winston";
 import createHttpError from "http-errors";
 import { validationResult } from "express-validator";
+import {
+  AccessTokenPayload,
+  RefreshTokenPayload,
+  TokenPayloadData,
+} from "../types/token.type";
+import CONFIG from "../config";
 
 export class AuthController {
   private userService: UserService;
   private passwordService: PasswordService;
+  private tokenService: TokenService;
+
   private logger: Logger;
 
   constructor({
     userService,
     passwordService,
+    tokenService,
     logger,
   }: AuthControllerConstructor) {
     this.userService = userService;
     this.passwordService = passwordService;
+    this.tokenService = tokenService;
     this.logger = logger;
+  }
+
+  sendTokens(res: Response, data: TokenPayloadData) {
+    const { email, userId, refreshTokenId, role } = data;
+    const accessTokenPayload: AccessTokenPayload = {
+      sub: userId,
+      email: email,
+      role: role,
+    };
+    const refreshTokenPayload: RefreshTokenPayload = {
+      sub: userId,
+      email: email,
+      role: role,
+      id: refreshTokenId,
+    };
+
+    const accessToken =
+      this.tokenService.generateAccessToken(accessTokenPayload);
+    const refreshToken =
+      this.tokenService.generateRefreshToken(refreshTokenPayload);
+
+    res.cookie("accessToken", accessToken, {
+      domain: "localhost",
+      sameSite: "strict",
+      maxAge: Number(CONFIG.ACCESS_MAX_AGE),
+      httpOnly: true,
+    });
+
+    res.cookie("refreshToken", refreshToken, {
+      domain: "localhost",
+      sameSite: "strict",
+      maxAge: Number(CONFIG.REFRESH_MAX_AGE),
+      httpOnly: true,
+    });
   }
 
   async register(req: RegisterUserRequest, res: Response, next: NextFunction) {
@@ -59,6 +103,16 @@ export class AuthController {
       this.logger.info("user registered successfully", {
         id: user.id,
       });
+
+      const refreshToken = await this.tokenService.persistRefreshToken(user);
+
+      this.sendTokens(res, {
+        email: user.email,
+        refreshTokenId: String(refreshToken.id),
+        role: user.role,
+        userId: String(user.id),
+      });
+
       res.status(201).json({
         id: user.id,
       });

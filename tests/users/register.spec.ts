@@ -4,8 +4,9 @@ import { UserData } from "../../src/types/user.type";
 import request from "supertest";
 import { AppDataSource } from "../../src/database/data-source";
 import truncateTables from "../utils/truncateTables";
-import { User } from "../../src/entity";
+import { RefreshToken, User } from "../../src/entity";
 import { Roles } from "../../src/constants";
+import isJwt from "../utils/isJwt";
 
 describe("POST /auth/register", () => {
   let connection: DataSource;
@@ -153,6 +154,98 @@ describe("POST /auth/register", () => {
       expect(response.statusCode).toBe(400);
       expect(users).toHaveLength(1);
     });
+
+    it("should return access & refresh token in cookies", async () => {
+      const userData: UserData = {
+        firstName: "Manthan",
+        lastName: "Sharma",
+        email: "manthan@gmail.com",
+        password: "Secret@123",
+      };
+
+      const response = await request(app as any)
+        .post("/auth/register")
+        .send(userData);
+
+      interface Headers {
+        ["set-cookie"]: string[];
+      }
+
+      let accessToken: string | null = null;
+      let refreshToken: string | null = null;
+      const cookies =
+        (response.headers as unknown as Headers)["set-cookie"] || [];
+
+      cookies.forEach((cookie) => {
+        if (cookie.startsWith("accessToken=")) {
+          accessToken = cookie.split(";")[0].split("=")[1];
+        }
+        if (cookie.startsWith("refreshToken=")) {
+          refreshToken = cookie.split(";")[0].split("=")[1];
+        }
+      });
+
+      expect(accessToken).not.toBeNull();
+      expect(refreshToken).not.toBeNull();
+    });
+
+    it("should return valid access & refresh token", async () => {
+      const userData: UserData = {
+        firstName: "Manthan",
+        lastName: "Sharma",
+        email: "manthan@gmail.com",
+        password: "Secret@123",
+      };
+
+      const response = await request(app as any)
+        .post("/auth/register")
+        .send(userData);
+
+      interface Headers {
+        ["set-cookie"]: string[];
+      }
+
+      let accessToken: string | null = null;
+      let refreshToken: string | null = null;
+      const cookies =
+        (response.headers as unknown as Headers)["set-cookie"] || [];
+
+      cookies.forEach((cookie) => {
+        if (cookie.startsWith("accessToken=")) {
+          accessToken = cookie.split(";")[0].split("=")[1];
+        }
+        if (cookie.startsWith("refreshToken=")) {
+          refreshToken = cookie.split(";")[0].split("=")[1];
+        }
+      });
+
+      expect(isJwt(accessToken)).toBeTruthy();
+      expect(isJwt(refreshToken)).toBeTruthy();
+    });
+
+    it("should store refresh token in database", async () => {
+      const userData: UserData = {
+        firstName: "Manthan",
+        lastName: "Sharma",
+        email: "manthan@gmail.com",
+        password: "Secret@123",
+      };
+
+      const response = await request(app as any)
+        .post("/auth/register")
+        .send(userData);
+
+      const refreshTokenRepo = connection.getRepository(RefreshToken);
+
+      // const refreshTokens = await refreshTokenRepo.find();
+      // expect(refreshTokens).toHaveLength(1);
+
+      const refreshTokens = await refreshTokenRepo
+        .createQueryBuilder("refreshToken")
+        .where("refreshToken.userId = :userId", { userId: response.body.id })
+        .getMany();
+      expect(refreshTokens).toHaveLength(1);
+    });
   });
 
   describe("Fields are missing", () => {
@@ -244,9 +337,6 @@ describe("POST /auth/register", () => {
         .send(userData);
       const userRepository = connection.getRepository(User);
       const users = await userRepository.find();
-
-      console.log(response.body);
-
       expect(users[0].email).toBe("manthan@gmail.com");
     });
 

@@ -1,3 +1,4 @@
 import User from "./User";
+import RefreshToken from "./RefreshToken";
 
-export { User };
+export { User, RefreshToken };
