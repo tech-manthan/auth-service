@@ -1,7 +1,8 @@
 import { Logger } from "winston";
-import { UserService } from "../services";
+import { PasswordService, UserService } from "../services";
 
 export interface AuthControllerConstructor {
   userService: UserService;
+  passwordService: PasswordService;
   logger: Logger;
 }

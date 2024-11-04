@@ -1,15 +1,21 @@
 import { NextFunction, Response } from "express";
 import { RegisterUserRequest } from "../types/request.type";
-import { UserService } from "../services";
+import { PasswordService, UserService } from "../services";
 import { AuthControllerConstructor } from "../types/controller.type";
 import { Logger } from "winston";
 
 export class AuthController {
   private userService: UserService;
+  private passwordService: PasswordService;
   private logger: Logger;
 
-  constructor({ userService, logger }: AuthControllerConstructor) {
+  constructor({
+    userService,
+    passwordService,
+    logger,
+  }: AuthControllerConstructor) {
     this.userService = userService;
+    this.passwordService = passwordService;
     this.logger = logger;
   }
 
@@ -22,11 +28,14 @@ export class AuthController {
     });
 
     try {
+      const hashedPassword =
+        await this.passwordService.hashedPassword(password);
+
       const user = await this.userService.create({
         firstName,
         lastName,
         email,
-        password,
+        password: hashedPassword,
       });
 
       this.logger.info("user registered successfully", {
