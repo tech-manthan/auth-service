@@ -1,5 +1,5 @@
 import { NextFunction, Response } from "express";
-import { RegisterUserRequest } from "../types/request.type";
+import { LoginUserRequest, RegisterUserRequest } from "../types/request.type";
 import { PasswordService, TokenService, UserService } from "../services";
 import { AuthControllerConstructor } from "../types/controller.type";
 import { Logger } from "winston";
@@ -114,6 +114,61 @@ export class AuthController {
       });
 
       res.status(201).json({
+        id: user.id,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async login(req: LoginUserRequest, res: Response, next: NextFunction) {
+    const result = validationResult(req);
+
+    if (!result.isEmpty()) {
+      res.status(400).json({
+        errors: result.array(),
+      });
+      return;
+    }
+
+    const { email, password } = req.body;
+    this.logger.info("request to login a user", {
+      email,
+      password: "*******",
+    });
+
+    try {
+      const user = await this.userService.findUserByEmail(email);
+
+      if (!user) {
+        const err = createHttpError(400, "user doesn't exist, try registering");
+        return next(err);
+      }
+
+      const isPasswordCorrect = this.passwordService.comparePassword(
+        password,
+        user.password,
+      );
+
+      if (!isPasswordCorrect) {
+        const err = createHttpError(
+          400,
+          "email or password are wrong,try again",
+        );
+        return next(err);
+      }
+
+      await this.tokenService.deleteRefreshTokens(user);
+      const refreshToken = await this.tokenService.persistRefreshToken(user);
+
+      this.sendTokens(res, {
+        email: user.email,
+        refreshTokenId: String(refreshToken.id),
+        role: user.role,
+        userId: String(user.id),
+      });
+
+      res.status(200).json({
         id: user.id,
       });
     } catch (err) {

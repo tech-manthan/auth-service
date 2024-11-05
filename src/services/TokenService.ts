@@ -48,4 +48,10 @@ export default class TokenService {
       expiresAt: new Date(Date.now() + Number(CONFIG.REFRESH_MAX_AGE)),
     });
   }
+
+  async deleteRefreshTokens(user: User) {
+    return await this.refreshTokenRepository.delete({
+      user: user,
+    });
+  }
 }
