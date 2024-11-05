@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 import { UserServiceConstructor } from "../types/service.type";
-import { UserData } from "../types/user.type";
+import { RegisterUserData } from "../types/user.type";
 import { User } from "../entity";
 import createHttpError from "http-errors";
 import { Roles } from "../constants";
@@ -12,7 +12,7 @@ export default class UserService {
     this.userRepository = userRepository;
   }
 
-  async create({ firstName, lastName, email, password }: UserData) {
+  async create({ firstName, lastName, email, password }: RegisterUserData) {
     try {
       return await this.userRepository.save({
         firstName,
@@ -31,6 +31,18 @@ export default class UserService {
       return await this.userRepository.findOne({
         where: {
           email,
+        },
+      });
+    } catch {
+      throw createHttpError(500, "database error while fetching user");
+    }
+  }
+
+  async findUserById(id: number) {
+    try {
+      return await this.userRepository.findOne({
+        where: {
+          id,
         },
       });
     } catch {

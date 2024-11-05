@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import app from "../../src/app";
-import { UserData } from "../../src/types/user.type";
+import { RegisterUserData } from "../../src/types/user.type";
 import request from "supertest";
 import { AppDataSource } from "../../src/database/data-source";
 import truncateTables from "../utils/truncateTables";
@@ -27,7 +27,7 @@ describe("POST /auth/register", () => {
   describe("Given all fields", () => {
     it("should return 201 status code", async () => {
       // Arrange
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -44,7 +44,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should return valid json response", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -61,7 +61,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should persist user in the database", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -81,7 +81,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should return the id of the created user", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -96,7 +96,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should assign a customer role", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -114,7 +114,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should store the hashed password in the database", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -133,7 +133,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should return 400 status code if email is already exist", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -156,7 +156,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should return access & refresh token in cookies", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -190,7 +190,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should return valid access & refresh token", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -224,7 +224,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should store refresh token in database", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -250,7 +250,7 @@ describe("POST /auth/register", () => {
 
   describe("Fields are missing", () => {
     it("should return 400 status code if email field is missing", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "",
@@ -268,7 +268,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should return 400 status code if firstName field is missing", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "",
         lastName: "Sharma",
         email: "manthan@gmai.com",
@@ -287,7 +287,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should return 400 status code if lastName field is missing", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "",
         email: "manthan@gmail.com",
@@ -305,7 +305,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should return 400 status code if password field is missing", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -325,7 +325,7 @@ describe("POST /auth/register", () => {
 
   describe("Fields are not in proper format", () => {
     it("should trim the email field", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: " manthan@gmail.com ",
@@ -341,7 +341,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should return 400 status code if email is not valid", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan.com",
@@ -359,7 +359,7 @@ describe("POST /auth/register", () => {
     });
 
     it("should return 400 status code if password is not valid", async () => {
-      const userData: UserData = {
+      const userData: RegisterUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",

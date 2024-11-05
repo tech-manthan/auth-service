@@ -16,6 +16,7 @@ const {
   ACCESS_MAX_AGE,
   REFRESH_MAX_AGE,
   REFRESH_TOKEN_SECRET,
+  JWKS_URI,
 } = process.env;
 
 const CONFIG = Object.freeze({
@@ -29,6 +30,7 @@ const CONFIG = Object.freeze({
   ACCESS_MAX_AGE,
   REFRESH_MAX_AGE,
   REFRESH_TOKEN_SECRET,
+  JWKS_URI,
 });
 
 export default CONFIG;

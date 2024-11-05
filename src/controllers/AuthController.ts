@@ -1,5 +1,9 @@
 import { NextFunction, Response } from "express";
-import { LoginUserRequest, RegisterUserRequest } from "../types/request.type";
+import {
+  AuthRequest,
+  LoginUserRequest,
+  RegisterUserRequest,
+} from "../types/request.type";
 import { PasswordService, TokenService, UserService } from "../services";
 import { AuthControllerConstructor } from "../types/controller.type";
 import { Logger } from "winston";
@@ -176,6 +180,16 @@ export class AuthController {
       res.status(200).json({
         id: user.id,
       });
+    } catch (err) {
+      next(err);
+    }
+  }
+
+  async self(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      const user = await this.userService.findUserById(Number(req.auth.sub));
+
+      res.json(user);
     } catch (err) {
       next(err);
     }
