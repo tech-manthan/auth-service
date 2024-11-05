@@ -109,4 +109,17 @@ describe("GET /auth/self", () => {
       );
     });
   });
+
+  describe("Fields are missing", () => {
+    it("should return 401 status code if access token not present", async () => {
+      // Add Cookies
+      const response = await request(app as any)
+        .get("/auth/self")
+        .set("Cookie", [`accessToken=${""};`])
+        .send();
+
+      // Assert
+      expect(response.statusCode).toBe(401);
+    });
+  });
 });
