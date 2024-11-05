@@ -222,4 +222,33 @@ export class AuthController {
       next(err);
     }
   }
+
+  async logout(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+
+      // res.cookie("accessToken", "", {
+      //   domain: "localhost",
+      //   sameSite: "strict",
+      //   maxAge: Number(CONFIG.ACCESS_MAX_AGE),
+      //   httpOnly: true,
+      // });
+
+      // res.cookie("refreshToken", "", {
+      //   domain: "localhost",
+      //   sameSite: "strict",
+      //   maxAge: Number(CONFIG.REFRESH_MAX_AGE),
+      //   httpOnly: true,
+      // });
+      res.clearCookie("accessToken");
+      res.clearCookie("refreshToken");
+
+      this.logger.info("user logged out successfully");
+      res.json({
+        id: req.auth.sub,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }
