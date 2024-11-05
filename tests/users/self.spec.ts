@@ -76,5 +76,37 @@ describe("GET /auth/self", () => {
       // Assert
       expect(response.body.id as Record<string, string>).toBe(data.id);
     });
+
+    it("should return not return password", async () => {
+      // User in Database
+      const userData: UserData = {
+        firstName: "Manthan",
+        lastName: "Sharma",
+        email: "manthan@gmail.com",
+        password: "Secret@123",
+        role: Roles.CUSTOMER,
+      };
+
+      const userRepository = connection.getRepository(User);
+      const data = await userRepository.save(userData);
+
+      // Generate Tokens
+      const accessToken = jwks.token({
+        sub: String(data.id),
+        role: data.role,
+      });
+
+      // Add Cookies
+      const response = await request(app as any)
+        .get("/auth/self")
+        .set("Cookie", [`accessToken=${accessToken};`])
+        .send();
+
+      console.log(response.body);
+      // Assert
+      expect(response.body as Record<string, string>).not.toHaveProperty(
+        "password",
+      );
+    });
   });
 });

@@ -189,7 +189,7 @@ export class AuthController {
     try {
       const user = await this.userService.findUserById(Number(req.auth.sub));
 
-      res.json(user);
+      res.status(200).json({ ...user, password: undefined });
     } catch (err) {
       next(err);
     }
