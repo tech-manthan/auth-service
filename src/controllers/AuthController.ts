@@ -141,11 +141,14 @@ export class AuthController {
       const user = await this.userService.findUserByEmail(email);
 
       if (!user) {
-        const err = createHttpError(400, "user doesn't exist, try registering");
+        const err = createHttpError(
+          400,
+          "email or password are wrong,try again",
+        );
         return next(err);
       }
 
-      const isPasswordCorrect = this.passwordService.comparePassword(
+      const isPasswordCorrect = await this.passwordService.comparePassword(
         password,
         user.password,
       );
@@ -167,6 +170,8 @@ export class AuthController {
         role: user.role,
         userId: String(user.id),
       });
+
+      this.logger.info("user logged in successfully", { id: user.id });
 
       res.status(200).json({
         id: user.id,
