@@ -17,7 +17,7 @@ export type AuthCookie = {
 export interface AuthRequest extends Request {
   auth: {
     sub: string;
-    id: string | number;
+    id: string;
     role: string;
     email: string;
   };

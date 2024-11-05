@@ -1,4 +1,5 @@
 import globalErrorMiddleware from "./globalErrorMiddleware";
 import authenticate from "./authenticate";
+import validateRefreshToken from "./validateRefreshToken";
 
-export { globalErrorMiddleware, authenticate };
+export { globalErrorMiddleware, authenticate, validateRefreshToken };

@@ -194,4 +194,32 @@ export class AuthController {
       next(err);
     }
   }
+
+  async refresh(req: AuthRequest, res: Response, next: NextFunction) {
+    try {
+      await this.tokenService.deleteRefreshToken(Number(req.auth.id));
+      const user = await this.userService.findUserById(Number(req.auth.sub));
+
+      if (!user) {
+        const err = createHttpError(400, "inavlid refresh token");
+        return next(err);
+      }
+
+      const refreshToken = await this.tokenService.persistRefreshToken(user);
+
+      this.sendTokens(res, {
+        email: req.auth.email,
+        refreshTokenId: String(refreshToken.id),
+        role: req.auth.role,
+        userId: req.auth.sub,
+      });
+
+      this.logger.info("tokens refreshed successfully");
+      res.json({
+        id: refreshToken.id,
+      });
+    } catch (err) {
+      next(err);
+    }
+  }
 }

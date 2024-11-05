@@ -10,7 +10,7 @@ import { AppDataSource } from "../database/data-source";
 import { RefreshToken, User } from "../entity";
 import { logger } from "../utils";
 import { loginUserValidator, registerUserValidator } from "../validators";
-import { authenticate } from "../middlewares";
+import { authenticate, validateRefreshToken } from "../middlewares";
 import { AuthRequest } from "../types/request.type";
 
 const authRouter = express.Router();
@@ -49,6 +49,13 @@ authRouter.get(
   authenticate as RequestHandler,
   (req: Request, res: Response, next: NextFunction) =>
     authController.self(req as AuthRequest, res, next),
+);
+
+authRouter.post(
+  "/refresh",
+  validateRefreshToken as RequestHandler,
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.refresh(req as AuthRequest, res, next),
 );
 
 export default authRouter;
