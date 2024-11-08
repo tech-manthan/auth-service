@@ -4,9 +4,8 @@ import { AppDataSource } from "../../src/database/data-source";
 import app from "../../src/app";
 import createJWKSMock from "mock-jwks";
 import { Tenant, User } from "../../src/entity";
-import { CreateTenantData } from "../../src/types/tenant.type";
 import { Roles } from "../../src/constants";
-import { UserData } from "../../src/types/user.type";
+import { CreateUserData } from "../../src/types/user.type";
 
 describe("POST /tenant/create", () => {
   let connection: DataSource;
@@ -44,11 +43,12 @@ describe("POST /tenant/create", () => {
         address: "Tenant 1 Address",
       });
 
-      const userData: UserData = {
+      const userData: CreateUserData = {
         firstName: "Manager",
         lastName: "1",
         email: "manager1@gmail.com",
         password: "Manager@123",
+        role: Roles.MANAGER,
         tenantId: tenant.id,
       };
 
@@ -82,11 +82,12 @@ describe("POST /tenant/create", () => {
         address: "Tenant 1 Address",
       });
 
-      const userData: UserData = {
+      const userData: CreateUserData = {
         firstName: "Manager",
         lastName: "1",
         email: "manager1@gmail.com",
         password: "Manager@123",
+        role: Roles.MANAGER,
         tenantId: tenant.id,
       };
 
@@ -117,11 +118,12 @@ describe("POST /tenant/create", () => {
         address: "Tenant 1 Address",
       });
 
-      const userData: UserData = {
+      const userData: CreateUserData = {
         firstName: "Manager",
         lastName: "1",
         email: "manager1@gmail.com",
         password: "Manager@123",
+        role: Roles.MANAGER,
         tenantId: tenant.id,
       };
 
