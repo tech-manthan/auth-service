@@ -7,62 +7,63 @@ import express, {
 import { authenticate, canAccess } from "../middlewares";
 import { Roles } from "../constants";
 import {
-  createTenantValidator,
+  createUserValidator,
   idParamValidator,
   updateUserValidator,
 } from "../validators";
 import {
-  CreateTenantRequest,
+  CreateUserRequest,
   IdParamRequest,
-  UpdateTenantRequest,
+  UpdateUserRequest,
 } from "../types/request.type";
-import { tenantController } from "../dependency-injection";
+import { userController } from "../dependency-injection";
+import { AuthRequest } from "../types/request.type";
 
-const tenantRouter = express.Router();
+const userRouter = express.Router();
 
-tenantRouter.post(
+userRouter.post(
   "/",
   authenticate as RequestHandler,
   canAccess([Roles.ADMIN]) as RequestHandler,
-  createTenantValidator,
+  createUserValidator,
   (req: Request, res: Response, next: NextFunction) =>
-    tenantController.create(req as CreateTenantRequest, res, next),
+    userController.create(req as CreateUserRequest, res, next),
 );
 
-tenantRouter.get(
+userRouter.get(
   "/",
   authenticate as RequestHandler,
   canAccess([Roles.ADMIN]) as RequestHandler,
   (req: Request, res: Response, next: NextFunction) =>
-    tenantController.getAll(req, res, next),
+    userController.getAll(req as AuthRequest, res, next),
 );
 
-tenantRouter.get(
+userRouter.get(
   "/:id",
   authenticate as RequestHandler,
   canAccess([Roles.ADMIN]) as RequestHandler,
   idParamValidator,
   (req: Request, res: Response, next: NextFunction) =>
-    tenantController.getOne(req as IdParamRequest, res, next),
+    userController.getOne(req as IdParamRequest, res, next),
 );
 
-tenantRouter.delete(
+userRouter.delete(
   "/:id",
   authenticate as RequestHandler,
   canAccess([Roles.ADMIN]) as RequestHandler,
   idParamValidator,
   (req: Request, res: Response, next: NextFunction) =>
-    tenantController.delete(req as IdParamRequest, res, next),
+    userController.delete(req as IdParamRequest, res, next),
 );
 
-tenantRouter.put(
+userRouter.put(
   "/:id",
   authenticate as RequestHandler,
   canAccess([Roles.ADMIN]) as RequestHandler,
   idParamValidator,
   updateUserValidator,
   (req: Request, res: Response, next: NextFunction) =>
-    tenantController.update(req as UpdateTenantRequest, res, next),
+    userController.update(req as UpdateUserRequest, res, next),
 );
 
-export default tenantRouter;
+export default userRouter;

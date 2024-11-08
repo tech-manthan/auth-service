@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import app from "../../src/app";
-import { UserData } from "../../src/types/user.type";
+import { CreateUserData, UserData } from "../../src/types/user.type";
 import createJWKSMock from "mock-jwks";
 import request from "supertest";
 import { AppDataSource } from "../../src/database/data-source";
@@ -50,7 +50,7 @@ describe("GET /auth/self", () => {
 
     it("should return user data", async () => {
       // User in Database
-      const userData: UserData = {
+      const userData: CreateUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",
@@ -79,7 +79,7 @@ describe("GET /auth/self", () => {
 
     it("should return not return password", async () => {
       // User in Database
-      const userData: UserData = {
+      const userData: CreateUserData = {
         firstName: "Manthan",
         lastName: "Sharma",
         email: "manthan@gmail.com",

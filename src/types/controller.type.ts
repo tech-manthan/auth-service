@@ -17,3 +17,9 @@ export interface TenantControllerConstructor {
   tenantService: TenantService;
   logger: Logger;
 }
+
+export interface UserControllerConstructor {
+  userService: UserService;
+  passwordService: PasswordService;
+  logger: Logger;
+}

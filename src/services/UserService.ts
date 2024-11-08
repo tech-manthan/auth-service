@@ -1,9 +1,8 @@
-import { Repository } from "typeorm";
+import { Not, Repository } from "typeorm";
 import { UserServiceConstructor } from "../types/service.type";
-import { RegisterUserData } from "../types/user.type";
+import { CreateUserData, UpdateUserData } from "../types/user.type";
 import { User } from "../entity";
 import createHttpError from "http-errors";
-import { Roles } from "../constants";
 
 export default class UserService {
   private userRepository: Repository<User>;
@@ -12,27 +11,40 @@ export default class UserService {
     this.userRepository = userRepository;
   }
 
-  async create({ firstName, lastName, email, password }: RegisterUserData) {
+  async create({
+    firstName,
+    lastName,
+    email,
+    password,
+    role,
+    tenantId,
+  }: CreateUserData) {
     try {
       return await this.userRepository.save({
         firstName,
         lastName,
         email,
         password,
-        role: Roles.CUSTOMER,
+        role,
+        tenant: {
+          id: tenantId,
+        },
       });
-    } catch {
+    } catch (err) {
+      console.log(err);
       throw createHttpError(500, "database error while saving user");
     }
   }
 
   async findUserByEmail(email: string) {
     try {
-      return await this.userRepository.findOne({
-        where: {
-          email,
-        },
-      });
+      return await this.userRepository
+        .createQueryBuilder("users")
+        .where("users.email = :email", {
+          email: email,
+        })
+        .addSelect("users.password")
+        .getOne();
     } catch {
       throw createHttpError(500, "database error while fetching user");
     }
@@ -47,6 +59,59 @@ export default class UserService {
       });
     } catch {
       throw createHttpError(500, "database error while fetching user");
+    }
+  }
+
+  async getAll(excludedId: number) {
+    try {
+      return await this.userRepository.find({
+        relations: ["tenant"],
+        where: {
+          id: Not(excludedId),
+        },
+      });
+    } catch {
+      throw createHttpError(500, "database error while fetching users");
+    }
+  }
+
+  async getOne(id: number) {
+    try {
+      return await this.userRepository.findOne({
+        relations: ["tenant"],
+        where: {
+          id: id,
+        },
+      });
+    } catch {
+      throw createHttpError(500, "database error while fetching user");
+    }
+  }
+
+  async delete(id: number) {
+    try {
+      return await this.userRepository.delete(id);
+    } catch {
+      throw createHttpError(500, "database error while deleting user");
+    }
+  }
+
+  async update(
+    id: number,
+    { firstName, lastName, role, tenantId }: UpdateUserData,
+  ) {
+    try {
+      return await this.userRepository.update(id, {
+        firstName,
+        lastName,
+        role,
+        tenant: {
+          id: tenantId,
+        },
+      });
+    } catch (err) {
+      console.log(err);
+      throw createHttpError(500, "database error while updating user");
     }
   }
 }

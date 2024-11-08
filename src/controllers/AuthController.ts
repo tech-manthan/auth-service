@@ -15,6 +15,7 @@ import {
   TokenPayloadData,
 } from "../types/token.type";
 import CONFIG from "../config";
+import { Roles } from "../constants";
 
 export class AuthController {
   private userService: UserService;
@@ -102,6 +103,7 @@ export class AuthController {
         lastName,
         email,
         password: hashedPassword,
+        role: Roles.CUSTOMER,
       });
 
       this.logger.info("user registered successfully", {

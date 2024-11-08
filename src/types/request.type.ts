@@ -1,5 +1,10 @@
 import { Request } from "express";
-import { LoginUserData, RegisterUserData } from "./user.type";
+import {
+  LoginUserData,
+  RegisterUserData,
+  UpdateUserData,
+  UserData,
+} from "./user.type";
 import { CreateTenantData, UpdateTenantData } from "./tenant.type";
 
 export interface RegisterUserRequest extends Request {
@@ -36,4 +41,12 @@ export interface IdParamRequest extends Request {
 
 export interface UpdateTenantRequest extends IdParamRequest {
   body: UpdateTenantData;
+}
+
+export interface CreateUserRequest extends Request {
+  body: UserData;
+}
+
+export interface UpdateUserRequest extends IdParamRequest {
+  body: UpdateUserData;
 }

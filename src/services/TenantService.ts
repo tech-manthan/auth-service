@@ -50,9 +50,12 @@ export default class TenantService {
     }
   }
 
-  async update(tenantId: number, tenantData: UpdateTenantData) {
+  async update(tenantId: number, { address, name }: UpdateTenantData) {
     try {
-      return await this.tenantRepository.update(tenantId, tenantData);
+      return await this.tenantRepository.update(tenantId, {
+        address,
+        name: name,
+      });
     } catch {
       throw createHttpError(500, "database error while fetching tenant");
     }
