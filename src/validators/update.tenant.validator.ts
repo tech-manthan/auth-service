@@ -1,6 +1,6 @@
 import { checkSchema } from "express-validator";
 
-const createTenantValidator = checkSchema({
+const updateTenantValidator = checkSchema({
   name: {
     trim: true,
     notEmpty: {
@@ -14,6 +14,7 @@ const createTenantValidator = checkSchema({
       errorMessage:
         "tenant name should be at least 4 characters & at most 100 characters",
     },
+    optional: true,
   },
   address: {
     trim: true,
@@ -28,7 +29,8 @@ const createTenantValidator = checkSchema({
       errorMessage:
         "addresss should be at least 4 characters & at most 255 characters",
     },
+    optional: true,
   },
 });
 
-export default createTenantValidator;
+export default updateTenantValidator;

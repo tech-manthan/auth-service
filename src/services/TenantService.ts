@@ -2,7 +2,7 @@ import { Repository } from "typeorm";
 import { TenantServiceConstructor } from "../types/service.type";
 import { Tenant } from "../entity";
 import createHttpError from "http-errors";
-import { CreateTenantData } from "../types/tenant.type";
+import { CreateTenantData, UpdateTenantData } from "../types/tenant.type";
 
 export default class TenantService {
   private tenantRepository: Repository<Tenant>;
@@ -19,6 +19,42 @@ export default class TenantService {
       });
     } catch {
       throw createHttpError(500, "database error while saving tenant");
+    }
+  }
+
+  async getAll() {
+    try {
+      return await this.tenantRepository.find();
+    } catch {
+      throw createHttpError(500, "database error while fetching tenants");
+    }
+  }
+
+  async getById(tenantId: number) {
+    try {
+      return await this.tenantRepository.findOne({
+        where: {
+          id: tenantId,
+        },
+      });
+    } catch {
+      throw createHttpError(500, "database error while fetching tenant");
+    }
+  }
+
+  async delete(tenantId: number) {
+    try {
+      return await this.tenantRepository.delete(tenantId);
+    } catch {
+      throw createHttpError(500, "database error while fetching tenant");
+    }
+  }
+
+  async update(tenantId: number, tenantData: UpdateTenantData) {
+    try {
+      return await this.tenantRepository.update(tenantId, tenantData);
+    } catch {
+      throw createHttpError(500, "database error while fetching tenant");
     }
   }
 }
