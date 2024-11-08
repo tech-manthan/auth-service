@@ -31,12 +31,6 @@ const updateTenantValidator = checkSchema({
     },
     optional: true,
   },
-  role: {
-    trim: true,
-    notEmpty: {
-      errorMessage: "tenant address is required",
-    },
-  },
 });
 
 export default updateTenantValidator;

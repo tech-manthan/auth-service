@@ -30,7 +30,9 @@ export default class User {
   @Column()
   role: string;
 
-  @ManyToOne(() => Tenant)
+  @ManyToOne(() => Tenant, {
+    onDelete: "SET NULL",
+  })
   tenant: Tenant;
 
   @UpdateDateColumn()

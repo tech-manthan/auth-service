@@ -37,6 +37,8 @@ const updateUserValidator = checkSchema({
           (req.body as Record<string, string>).tenantId
         ) {
           throw new Error("tenantId is not required when role is customer");
+        } else if ((req.body as Record<string, string>).role === Roles.ADMIN) {
+          throw new Error("cannot make a user admin");
         }
         return true;
       },

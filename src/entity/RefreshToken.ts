@@ -18,7 +18,9 @@ export default class RefreshToken {
   @Column({ type: "timestamp" })
   expiresAt: Date;
 
-  @ManyToOne(() => User)
+  @ManyToOne(() => User, {
+    onDelete: "CASCADE",
+  })
   user: User;
 
   @UpdateDateColumn()
