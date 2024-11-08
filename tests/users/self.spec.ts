@@ -102,7 +102,6 @@ describe("GET /auth/self", () => {
         .set("Cookie", [`accessToken=${accessToken};`])
         .send();
 
-      console.log(response.body);
       // Assert
       expect(response.body as Record<string, string>).not.toHaveProperty(
         "password",

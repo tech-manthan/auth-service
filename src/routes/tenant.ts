@@ -1,9 +1,15 @@
-import express, { NextFunction, Request, Response } from "express";
+import express, {
+  NextFunction,
+  Request,
+  RequestHandler,
+  Response,
+} from "express";
 import { AppDataSource } from "../database/data-source";
 import { Tenant } from "../entity";
 import { TenantService } from "../services";
 import { TenantController } from "../controllers";
 import { logger } from "../utils";
+import { authenticate } from "../middlewares";
 
 const tenantRouter = express.Router();
 
@@ -16,8 +22,11 @@ const tenantController = new TenantController({
   logger,
 });
 
-tenantRouter.post("/", (req: Request, res: Response, next: NextFunction) =>
-  tenantController.create(req, res, next),
+tenantRouter.post(
+  "/",
+  authenticate as RequestHandler,
+  (req: Request, res: Response, next: NextFunction) =>
+    tenantController.create(req, res, next),
 );
 
 export default tenantRouter;
