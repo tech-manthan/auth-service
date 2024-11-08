@@ -3,7 +3,7 @@ import "reflect-metadata";
 import express, { Request, Response } from "express";
 import cookieParser from "cookie-parser";
 import { globalErrorMiddleware } from "./middlewares";
-import { authRouter } from "./routes";
+import { authRouter, tenantRouter } from "./routes";
 
 const app = express();
 
@@ -17,6 +17,7 @@ app.get("/", (req: Request, res: Response) => {
 });
 
 app.use("/auth", authRouter);
+app.use("/tenants", tenantRouter);
 
 app.use(globalErrorMiddleware);
 
