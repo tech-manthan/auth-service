@@ -10,7 +10,6 @@ import { UserControllerConstructor } from "../types/controller.type";
 import { Logger } from "winston";
 import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
-import { Roles } from "../constants";
 
 export class UserController {
   private userService: UserService;
@@ -38,7 +37,7 @@ export class UserController {
       return;
     }
 
-    const { firstName, lastName, email, password, tenantId } = req.body;
+    const { firstName, lastName, email, password, tenantId, role } = req.body;
     this.logger.info("request to create a user", {
       firstName,
       lastName,
@@ -63,7 +62,7 @@ export class UserController {
         lastName,
         email,
         password: hashedPassword,
-        role: Roles.MANAGER,
+        role,
         tenantId,
       });
 

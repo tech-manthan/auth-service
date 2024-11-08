@@ -1,4 +1,5 @@
 import { checkSchema } from "express-validator";
+import { Roles } from "../constants";
 
 const createUserValidator = checkSchema({
   email: {
@@ -45,6 +46,34 @@ const createUserValidator = checkSchema({
       errorMessage: "Password is required",
     },
   },
+  role: {
+    trim: true,
+    isIn: {
+      options: [[Roles.ADMIN, Roles.CUSTOMER, Roles.MANAGER]],
+      errorMessage: "role must be one of: manager, customer, or admin",
+    },
+    custom: {
+      options: (value, { req }) => {
+        if (
+          value === Roles.MANAGER &&
+          !(req.body as Record<string, string>).tenantId
+        ) {
+          throw new Error("tenantId is required when role is manager");
+        } else if (
+          (value === Roles.CUSTOMER || value === Roles.ADMIN) &&
+          (req.body as Record<string, string>).tenantId
+        ) {
+          throw new Error(
+            "tenantId is not required when role is customer or admin",
+          );
+        }
+        return true;
+      },
+    },
+    notEmpty: {
+      errorMessage: "role is required",
+    },
+  },
   tenantId: {
     isInt: {
       options: {
@@ -55,6 +84,7 @@ const createUserValidator = checkSchema({
     notEmpty: {
       errorMessage: "tenantId is required",
     },
+    optional: true,
   },
 });
 

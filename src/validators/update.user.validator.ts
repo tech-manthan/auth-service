@@ -24,26 +24,29 @@ const updateUserValidator = checkSchema({
     optional: true,
   },
   role: {
+    trim: true,
+    isIn: {
+      options: [[Roles.ADMIN, Roles.CUSTOMER, Roles.MANAGER]],
+      errorMessage: "role must be one of: manager, customer, or admin",
+    },
     custom: {
       options: (value, { req }) => {
-        console.log((req.body as Record<string, string>).tenantId);
         if (
-          (req.body as Record<string, string>).role === Roles.MANAGER &&
+          value === Roles.MANAGER &&
           !(req.body as Record<string, string>).tenantId
         ) {
           throw new Error("tenantId is required when role is manager");
         } else if (
-          (req.body as Record<string, string>).role === Roles.CUSTOMER &&
+          (value === Roles.CUSTOMER || value === Roles.ADMIN) &&
           (req.body as Record<string, string>).tenantId
         ) {
-          throw new Error("tenantId is not required when role is customer");
-        } else if ((req.body as Record<string, string>).role === Roles.ADMIN) {
-          throw new Error("cannot make a user admin");
+          throw new Error(
+            "tenantId is not required when role is customer or admin",
+          );
         }
         return true;
       },
     },
-    trim: true,
     notEmpty: {
       errorMessage: "role is required",
     },
@@ -60,11 +63,7 @@ const updateUserValidator = checkSchema({
     notEmpty: {
       errorMessage: "tenantId is required",
     },
-    optional: {
-      options: {
-        nullable: true,
-      },
-    },
+    optional: true,
   },
 });
 
