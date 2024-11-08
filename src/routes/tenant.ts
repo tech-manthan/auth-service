@@ -29,12 +29,8 @@ tenantRouter.post(
     tenantController.create(req as CreateTenantRequest, res, next),
 );
 
-tenantRouter.get(
-  "/",
-  authenticate as RequestHandler,
-  canAccess([Roles.ADMIN]) as RequestHandler,
-  (req: Request, res: Response, next: NextFunction) =>
-    tenantController.getAll(req, res, next),
+tenantRouter.get("/", (req: Request, res: Response, next: NextFunction) =>
+  tenantController.getAll(req, res, next),
 );
 
 tenantRouter.get(
