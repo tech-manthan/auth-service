@@ -56,7 +56,7 @@ userRouter.delete(
     userController.delete(req as IdParamRequest, res, next),
 );
 
-userRouter.put(
+userRouter.patch(
   "/:id",
   authenticate as RequestHandler,
   canAccess([Roles.ADMIN]) as RequestHandler,

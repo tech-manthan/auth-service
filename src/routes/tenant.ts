@@ -55,7 +55,7 @@ tenantRouter.delete(
     tenantController.delete(req as IdParamRequest, res, next),
 );
 
-tenantRouter.put(
+tenantRouter.patch(
   "/:id",
   authenticate as RequestHandler,
   canAccess([Roles.ADMIN]) as RequestHandler,
