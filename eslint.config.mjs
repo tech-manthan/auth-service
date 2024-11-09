@@ -16,6 +16,7 @@ export default tseslint.config(
       "jest.config.js",
       "tests",
       "scripts",
+      "coverage",
     ],
   },
   {

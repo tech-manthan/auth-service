@@ -1,32 +1,23 @@
 import { sign } from "jsonwebtoken";
-import fs from "node:fs";
-import path from "node:path";
-
 import { AccessTokenPayload, RefreshTokenPayload } from "../types/token.type";
 
 import CONFIG from "../config";
-import createHttpError from "http-errors";
 import { Repository } from "typeorm";
 import { RefreshToken, User } from "../entity";
 import { TokenServiceConstructor } from "../types/service.type";
+import createHttpError from "http-errors";
 
 export default class TokenService {
-  private privateKey: Buffer;
   private refreshTokenRepository: Repository<RefreshToken>;
   constructor({ refreshTokenRepository }: TokenServiceConstructor) {
     this.refreshTokenRepository = refreshTokenRepository;
-    try {
-      this.privateKey = fs.readFileSync(
-        path.join(__dirname, "../../certs/private.pem"),
-      );
-    } catch {
-      const error = createHttpError(500, "error while reading private key");
-      throw error;
-    }
   }
 
   generateAccessToken(payload: AccessTokenPayload) {
-    return sign(payload, this.privateKey, {
+    if (!CONFIG.PRIVATE_KEY) {
+      throw createHttpError(500, "private key not set");
+    }
+    return sign(payload, CONFIG.PRIVATE_KEY, {
       algorithm: "RS256",
       expiresIn: Number(CONFIG.ACCESS_MAX_AGE),
       issuer: "auth-service",
