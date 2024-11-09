@@ -106,10 +106,10 @@
     // "allowUnreachableCode": true,                     /* Disable error reporting for unreachable code. */
 
     /* Completeness */
-    "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
+    // "skipDefaultLibCheck": true,                      /* Skip type checking .d.ts files that are included with TypeScript. */
     "skipLibCheck": true /* Skip type checking all .d.ts files. */,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
   },
-  "exclude": ["**/*.spec.ts","tests"]
+  "exclude": ["**/*.spec.ts","tests","node_modules","node_modules/@types/node/stream/web.d.ts"]
 }
