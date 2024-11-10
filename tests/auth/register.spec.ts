@@ -3,7 +3,6 @@ import app from "../../src/app";
 import { RegisterUserData } from "../../src/types/user.type";
 import request from "supertest";
 import { AppDataSource } from "../../src/database/data-source";
-import truncateTables from "../utils/truncateTables";
 import { RefreshToken, User } from "../../src/entity";
 import { Roles } from "../../src/constants";
 import isJwt from "../utils/isJwt";

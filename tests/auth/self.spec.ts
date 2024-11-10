@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import app from "../../src/app";
-import { CreateUserData, UserData } from "../../src/types/user.type";
+import { CreateUserData } from "../../src/types/user.type";
 import createJWKSMock from "mock-jwks";
 import request from "supertest";
 import { AppDataSource } from "../../src/database/data-source";
