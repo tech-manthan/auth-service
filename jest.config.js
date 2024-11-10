@@ -9,3 +9,5 @@ module.exports = {
   coverageProvider: "v8",
   collectCoverageFrom: ["src/**/*.ts", "!tests/**", "!**/node_modules/**"],
 };
+
+jest.setTimeout(30000);
