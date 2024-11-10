@@ -17,6 +17,7 @@ export default tseslint.config(
       "tests",
       "scripts",
       "coverage",
+      ".github",
     ],
   },
   {

@@ -5,7 +5,7 @@ import createHttpError from "http-errors";
 import { CreateTenantData, UpdateTenantData } from "../types/tenant.type";
 
 export default class TenantService {
-  private tenantRepository: Repository<Tenant>;
+  private readonly tenantRepository: Repository<Tenant>;
 
   constructor({ tenantRepository }: TenantServiceConstructor) {
     this.tenantRepository = tenantRepository;

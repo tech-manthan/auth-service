@@ -15,7 +15,7 @@ export default function (token: string | null): boolean {
     });
 
     return true;
-  } catch (err) {
+  } catch {
     return false;
   }
 }

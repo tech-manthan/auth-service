@@ -18,11 +18,10 @@ import CONFIG from "../config";
 import { Roles } from "../constants";
 
 export class AuthController {
-  private userService: UserService;
-  private passwordService: PasswordService;
-  private tokenService: TokenService;
-
-  private logger: Logger;
+  private readonly userService: UserService;
+  private readonly passwordService: PasswordService;
+  private readonly tokenService: TokenService;
+  private readonly logger: Logger;
 
   constructor({
     userService,

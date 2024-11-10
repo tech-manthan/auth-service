@@ -18,17 +18,15 @@ const authRouter = express.Router();
 authRouter.post(
   "/register",
   registerUserValidator,
-  (req: Request, res: Response, next: NextFunction) => {
-    void authController.register(req, res, next);
-  },
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.register(req, res, next),
 );
 
 authRouter.post(
   "/login",
   loginUserValidator,
-  (req: Request, res: Response, next: NextFunction) => {
-    void authController.login(req, res, next);
-  },
+  (req: Request, res: Response, next: NextFunction) =>
+    authController.login(req, res, next),
 );
 
 authRouter.get(

@@ -8,7 +8,7 @@ import { TokenServiceConstructor } from "../types/service.type";
 import createHttpError from "http-errors";
 
 export default class TokenService {
-  private refreshTokenRepository: Repository<RefreshToken>;
+  private readonly refreshTokenRepository: Repository<RefreshToken>;
   constructor({ refreshTokenRepository }: TokenServiceConstructor) {
     this.refreshTokenRepository = refreshTokenRepository;
   }

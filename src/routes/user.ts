@@ -15,9 +15,9 @@ import {
   CreateUserRequest,
   IdParamRequest,
   UpdateUserRequest,
+  AuthRequest,
 } from "../types/request.type";
 import { userController } from "../dependency-injection";
-import { AuthRequest } from "../types/request.type";
 
 const userRouter = express.Router();
 

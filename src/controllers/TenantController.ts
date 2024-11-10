@@ -11,8 +11,8 @@ import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 
 export class TenantController {
-  private tenantService: TenantService;
-  private logger: Logger;
+  private readonly tenantService: TenantService;
+  private readonly logger: Logger;
 
   constructor({ tenantService, logger }: TenantControllerConstructor) {
     this.tenantService = tenantService;

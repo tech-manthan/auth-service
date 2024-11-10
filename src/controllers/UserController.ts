@@ -12,9 +12,9 @@ import { validationResult } from "express-validator";
 import createHttpError from "http-errors";
 
 export class UserController {
-  private userService: UserService;
-  private passwordService: PasswordService;
-  private logger: Logger;
+  private readonly userService: UserService;
+  private readonly passwordService: PasswordService;
+  private readonly logger: Logger;
 
   constructor({
     logger,

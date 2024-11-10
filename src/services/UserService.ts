@@ -5,7 +5,7 @@ import { User } from "../entity";
 import createHttpError from "http-errors";
 
 export default class UserService {
-  private userRepository: Repository<User>;
+  private readonly userRepository: Repository<User>;
 
   constructor({ userRepository }: UserServiceConstructor) {
     this.userRepository = userRepository;
