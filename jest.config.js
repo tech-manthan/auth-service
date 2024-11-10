@@ -7,7 +7,6 @@ module.exports = {
   verbose: true,
   collectCoverage: true,
   coverageProvider: "v8",
+  testTimeout: 30000,
   collectCoverageFrom: ["src/**/*.ts", "!tests/**", "!**/node_modules/**"],
 };
-
-jest.setTimeout(30000);
