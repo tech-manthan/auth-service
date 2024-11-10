@@ -29,6 +29,8 @@ jobs:
           DB_PASSWORD: ${{ secrets.TEST_DB_PASSWORD }}
           DB_NAME: ${{ secrets.TEST_DB_NAME }}
           REFRESH_TOKEN_SECRET: ${{ secrets.REFRESH_TOKEN_SECRET }}
+          ACCESS_MAX_AGE: ${{ secrets.ACCESS_MAX_AGE }}
+          REFRESH_MAX_AGE: ${{ secrets.REFRESH_MAX_AGE }}
           JWKS_URI: ${{ secrets.JWKS_URI }}
           PRIVATE_KEY: ${{ secrets.PRIVATE_KEY }}
       - name: Build-ts
